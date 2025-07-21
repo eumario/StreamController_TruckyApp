@@ -19,6 +19,7 @@ class TruckyAppBackend(BackendBase):
     settings_changed: bool = False
     authorized: bool = False
     stopping: bool = False
+    prev_telemetry: float = 0
 
     def __init__(self) -> None:
         super().__init__()
@@ -79,7 +80,10 @@ class TruckyAppBackend(BackendBase):
                     self.frontend.set_authorized(data['data']['permission'])
                     log.info("Connected to Trucky!")
                 elif data['type'] == "telemetry":
-                    self.frontend.trucky_websocket_event_holder.trigger_event(data['data'])
+                    stamp = time.time()
+                    if stamp - self.prev_telemetry > 0.1:
+                        self.prev_telemetry = stamp
+                        self.frontend.trucky_websocket_event_holder.trigger_event(data['data'])
         except json.JSONDecodeError:
             print(f"Received unknown packet: {message}")
 
