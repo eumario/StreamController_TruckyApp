@@ -1,0 +1,213 @@
+import asyncio
+import websockets
+import json
+from loguru import logger as log
+from typing import Optional, Callable, Dict, Any
+import threading
+import time
+
+class WebSocketClient:
+    def __init__(self, uri: str, message_handler: Optional[Callable[[str], None]] = None,
+                 connected_handler: Optional[Callable[[None], None]] = None,
+                 reconnect_delay: float = 5.0, max_retries: Optional[int] = None):
+        self.uri = uri
+        self.websocket = None
+        self.message_handler = message_handler or self._default_message_handler
+        self.connected_handler = connected_handler or self._default_connection_handler
+        self.running = False
+        self.loop = None
+        self.thread = None
+        self.reconnect_delay = reconnect_delay
+        self.max_retries = max_retries
+        self.retry_count = 0
+        self.connected = False
+
+    def _default_message_handler(self, message: str) -> None:
+        log.info(f"Received message: {message}")
+
+    def _default_connection_handler(self) -> None:
+        pass
+
+    async def _connect(self) -> bool:
+        while self.running:
+            if self.max_retries is not None and self.retry_count >= self.max_retries:
+                log.error(f"Max retries ({self.max_retries}) exceeded, giving up")
+                return False
+
+            try:
+                log.info(f"Attempting to connect to {self.uri} (attempt {self.retry_count + 1})")
+                self.websocket = await websockets.connect(self.uri)
+                self.connected = True
+                self.retry_count = 0
+                log.info(f"Successfully connected to {self.uri}")
+                self.connected_handler()
+                return True
+            except Exception as e:
+                self.retry_count += 1
+                log.error(f"Connection attempt {self.retry_count} failed: {e}")
+
+                if self.max_retries is not None and self.retry_count >= self.max_retries:
+                    log.error(f"Max retries ({self.max_retries}) exceeded, giving up")
+                    return False
+
+                log.info(f"Retrying in {self.reconnect_delay} seconds...")
+                await asyncio.sleep(self.reconnect_delay)
+        return False
+
+    async def _listen(self) -> None:
+        while self.running:
+            try:
+                if not self.connected or not self.websocket:
+                    log.info("Connection lost, attempting to reconnect...")
+                    self.connected = False
+                    if not await self._connect():
+                        break
+
+                async for message in self.websocket:
+                    if not self.running:
+                        break
+                    try:
+                        self.message_handler(message)
+                    except Exception as e:
+                        log.error(f"Error processing message: {e}")
+            except websockets.exceptions.ConnectionClosed:
+                log.warning(f"WebSocket connection closed by server")
+                self.connected = False
+                if self.running:
+                    log.info(f"Reconnecting in {self.reconnect_delay} seconds...")
+                    await asyncio.sleep(self.reconnect_delay)
+
+            except websockets.exceptions.InvalidStatusCode as e:
+                log.error(f"Invalid status code: {e}")
+                self.connected = False
+                if self.running:
+                    log.info(f"Reconnecting in {self.reconnect_delay} seconds...")
+                    await asyncio.sleep(self.reconnect_delay)
+
+            except Exception as e:
+                log.error(f"Unexpected error in message listener: {e}")
+                self.connected = False
+                if self.running:
+                    log.error(f"Reconnecting in {self.reconnect_delay} seconds...")
+                    await asyncio.sleep(self.reconnect_delay)
+
+    async def _send_message_async(self, message: str) -> bool:
+        if not self.connected or not self.websocket:
+            log.error("WebSocket is not connected.")
+            return False
+
+        try:
+            await self.websocket.send(message)
+            return True
+        except websockets.exceptions.ConnectionClosed:
+            log.warning("Connection closed while sending message")
+            self.connected = False
+            return False
+        except Exception as e:
+            log.error(f"Error sending message: {e}")
+            return False
+
+    def send_message(self, message: str) -> bool:
+        if not self.loop or not self.running:
+            log.error("Client is not running")
+            return False
+
+        try:
+            future = asyncio.run_coroutine_threadsafe(
+                self._send_message_async(message),
+                self.loop
+            )
+            return future.result(5.0)
+        except Exception as e:
+            log.error(f"Error sending message: {e}")
+            return False
+
+    def send_json(self, data: Any) -> bool:
+        try:
+            message = json.dumps(data)
+            return self.send_message(message)
+        except json.JSONDecodeError as e:
+            log.error(f"Error encoding JSON:{e}")
+            return False
+
+    async def _run_async(self) -> None:
+        self.running = True
+
+        if not await self._connect():
+            log.error("Failed to establish initial connection.")
+            return
+
+        await self._listen()
+
+        await self._cleanup()
+
+    async def _cleanup(self) -> None:
+        self.connected = False
+        if self.websocket:
+            try:
+                await self.websocket.close()
+                log.info("WebSocket connection closed")
+            except Exception as e:
+                log.error(f"Error closing WebSocket: {e}")
+            finally:
+                self.websocket = None
+
+    def _run_in_thread(self) -> None:
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
+
+        try:
+            self.loop.run_until_complete(self._run_async())
+        except Exception as e:
+            log.error(f"Error in event loop: {e}")
+        finally:
+            self.loop.close()
+
+    def start(self) -> None:
+        if self.thread and self.thread.is_alive():
+            log.warning("Client is already running")
+            return
+
+        self.retry_count = 0
+        self.connected = False
+
+        self.thread = threading.Thread(target=self._run_in_thread, daemon=True)
+        self.thread.start()
+
+        time.sleep(1)
+
+        log.info("WebSocket client started")
+
+    def shutdown(self) -> None:
+        log.info("Shutting down WebSocket client...")
+
+        self.running = False
+
+        if self.loop and not self.loop.is_closed():
+            asyncio.run_coroutine_threadsafe(self._cleanup(), self.loop)
+
+            self.loop.call_soon_threadsafe(self.loop.stop)
+
+        if self.thread and self.thread.is_alive():
+            self.thread.join(timeout=5.0)
+
+        log.info("WebSocket client shutdown complete")
+
+    def is_connected(self) -> bool:
+        return (self.connected and
+                self.websocket is not None and
+                self.running)
+
+    def reset_retry_count(self) -> None:
+        self.retry_count = 0
+        log.info("Retry count reest")
+
+    def get_connection_info(self) -> dict:
+        return {
+            "uri": self.uri,
+            "connected": self.connected,
+            "running": self.running,
+            "retry_count": self.retry_count,
+            "max_retries": self.max_retries,
+            "reconnect_delay": self.reconnect_delay
+        }

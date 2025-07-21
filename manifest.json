@@ -1,0 +1,16 @@
+{
+  "version": "0.1.0",
+  "thumbnail": "store/thumbnail.png",
+  "id": "dev_eumario_TruckyApp",
+  "name": "TruckyApp Integration",
+  "author": "eumario",
+  "github": "https://github.com/eumario/StreamController_TruckyApp",
+  "tags": [
+    "stats",
+    "game stats",
+    "indicators",
+    "game"
+  ],
+  "minimum-app-version": "1.5.0-beta.9",
+  "app-version": "1.5.0-beta.11"
+}

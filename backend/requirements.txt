@@ -1,0 +1,2 @@
+websocket-client==1.8.0
+streamcontroller-plugin-tools==2.0.2
