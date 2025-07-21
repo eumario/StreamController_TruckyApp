@@ -10,6 +10,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 class TruckyCore(ActionCore):
+    last_state: any = None
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
