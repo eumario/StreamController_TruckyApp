@@ -49,7 +49,19 @@ class Icons(StrEnum):
     CAT_WIPERS = "category_wipers"
 
     # Actions
-    ACT_ACCIDENT = "action_accident"
+    ## Traffic Report
+    ACT_ACCIDENT = "accident"
+    ACT_TRAFFIC_MODERATE = "traffic-queue"
+    ACT_TRAFFIC_QUEUE = "traffic-moderate"
+    ACT_POLICE_BUTTON = "police"
+    ACT_ROADSIDE_HAZARD = "roadsize-hazard"
+    ACT_ROADWORKS = "roadworks"
+
+    ## High Beams
+    ACT_HIGH_BEAM_OFF = "high_beam_off"
+    ACT_HIGH_BEAM_ON = "high_beam_on"
+
+    ## Other
     ACT_ATS = "action_ats"
     ACT_ATS_SPEED_LIMIT = "action_ats_speed_limit"
     ACT_ATS_TRUCK = "action_ats_truck"
@@ -70,8 +82,6 @@ class Icons(StrEnum):
     ACT_GEAR = "action_gear"
     ACT_HAZARD_OFF = "action_hazard_off"
     ACT_HAZARD_ON = "action_hazard_on"
-    ACT_HIGH_BEAM_OFF = "action_high_beam_off"
-    ACT_HIGH_BEAM_ON = "action_high_beam_on"
     ACT_HORN = "action_horn"
     ACT_GAME_WIN = "action_game_win"
     ACT_LEFT_TURN_OFF = "action_left_turn_off"
@@ -89,7 +99,6 @@ class Icons(StrEnum):
     ACT_PARKING_BRAKE_ON = "action_parking_brake_on"
     ACT_PARKING_LIGHTS_OFF = "action_parking_lights_off"
     ACT_PARKING_LIGHTS_ON = "action_parking_lights_on"
-    ACT_POLICE_BUTTON = "action_police_button"
     ACT_PREV_RADIO = "action_prev_radio"
     ACT_RADIO = "action_radio"
     ACT_RADIO_ON = "action_radio_on"
@@ -97,16 +106,12 @@ class Icons(StrEnum):
     ACT_RETARDER_ON = "action_retarder_on"
     ACT_RIGHT_TURN_OFF = "action_right_turn_off"
     ACT_RIGHT_TURN_ON = "action_right_turn_on"
-    ACT_ROADSIDE_HAZARD = "action_roadside_hazard"
-    ACT_ROADWORKS = "action_roadworks"
     ACT_RPM = "action_rpm"
     ACT_SCREENSHOT = "action_screenshot"
     ACT_SPEED3 = "action_speed3"
     ACT_SPEEDOMETER = "action_speedometer"
     ACT_START_RECORDING = "action_start_recording"
     ACT_TMP = "action_tmp"
-    ACT_TRAFFIC_MODERATE = "action_traffic_moderate"
-    ACT_TRAFFIC_QUEUE = "action_traffic_queue"
     ACT_TRAILER_DAMAGE = "action_trailer_damage"
     ACT_TRAILER_OFF = "action_trailer_off"
     ACT_TRAILER_ON = "action_trailer_on"
