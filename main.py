@@ -11,6 +11,15 @@ from src.backend.DeckManagement.ImageHelpers import image2pixbuf
 
 # Actions
 from .actions.speed_text import SpeedText
+from .actions.traffic_report import TrafficReport
+from .actions.ingame_window import InGameWindow
+from .actions.highbeam import HighBeam
+from .actions.lights import Lights
+from .actions.left_turn_indcator import LeftTurnIndicator
+from .actions.right_turn_indicator import RightTurnIndicator
+from .actions.parking_break import ParkingBrake
+from .actions.hazard_lights import HazardLights
+from .actions.cruise_control import CruiseControl
 
 # Globals
 from .globals import Icons
@@ -68,6 +77,7 @@ class Trucky(PluginBase):
             action_base=SpeedText,
             action_id_suffix="SpeedText",
             action_name="Display Speed",
+            icon=self.get_action_icon(Icons.CAT_SPEEDOMETER),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -76,8 +86,139 @@ class Trucky(PluginBase):
         )
         self.add_action_holder(self.speed_text_holder)
 
+        self.traffic_report_holder = ActionHolder(
+            plugin_base=self,
+            action_base=TrafficReport,
+            action_id_suffix="TrafficReport",
+            action_name="Traffic Report",
+            icon=self.get_action_icon(Icons.CAT_ALERT),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.traffic_report_holder)
+
+        self.ingame_window_holder = ActionHolder(
+            plugin_base=self,
+            action_base=InGameWindow,
+            action_id_suffix="InGameWindow",
+            action_name="In-Game Window",
+            icon=self.get_action_icon(Icons.CAT_GAME_WIN),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.ingame_window_holder)
+
+        self.highbeam_holder = ActionHolder(
+            plugin_base=self,
+            action_base=HighBeam,
+            action_id_suffix="High_Beam",
+            action_name="High Beam Indicator",
+            icon=self.get_action_icon(Icons.CAT_HIGH_BEAM),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.highbeam_holder)
+
+        self.lowbeam_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Lights,
+            action_id_suffix="Low_Beam",
+            action_name="Lights Indicator",
+            icon=self.get_action_icon(Icons.CAT_LIGHTS),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.lowbeam_holder)
+
+        self.lblinker_holder = ActionHolder(
+            plugin_base=self,
+            action_base=LeftTurnIndicator,
+            action_id_suffix="Left_Turn",
+            action_name="Left Turn Indicator",
+            icon=self.get_action_icon(Icons.CAT_LEFT_TURN),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.lblinker_holder)
+
+        self.rblinker_holder = ActionHolder(
+            plugin_base=self,
+            action_base=RightTurnIndicator,
+            action_id_suffix="Right_Turn",
+            action_name="Right Turn Indicator",
+            icon=self.get_action_icon(Icons.CAT_RIGHT_TURN),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.rblinker_holder)
+
+        self.parking_brake_holder = ActionHolder(
+            plugin_base=self,
+            action_base=ParkingBrake,
+            action_id_suffix="Parking_Brake",
+            action_name="Parking Brake Indicator",
+            icon=self.get_action_icon(Icons.CAT_PARKING_BRAKE),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.parking_brake_holder)
+
+        self.hazard_lights_holder = ActionHolder(
+            plugin_base=self,
+            action_base=HazardLights,
+            action_id_suffix="Hazard_Lights",
+            action_name="Hazard Indicator",
+            icon=self.get_action_icon(Icons.CAT_HAZARD),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.hazard_lights_holder)
+
+        self.cruise_control_holder = ActionHolder(
+            plugin_base=self,
+            action_base=CruiseControl,
+            action_id_suffix="Cruise_Control",
+            action_name="Cruise Control Indicator",
+            icon=self.get_action_icon(Icons.CAT_CRUISE),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.cruise_control_holder)
+
+
     def get_selector_icon(self) -> Gtk.Widget:
         _, rendered = self.asset_manager.icons.get_asset_values(Icons.MAIN)
+        return Gtk.Image.new_from_pixbuf(image2pixbuf(rendered))
+
+    def get_action_icon(self, icon: Icons) -> Gtk.Image:
+        _, rendered = self.asset_manager.icons.get_asset_values(icon)
         return Gtk.Image.new_from_pixbuf(image2pixbuf(rendered))
 
     def get_settings_area(self) -> Adw.PreferencesGroup:
