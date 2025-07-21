@@ -28,21 +28,16 @@ class SpeedText(TruckyCore):
         self.has_configuration = True
 
     async def on_telemetry_update(self, event, data: dict):
-        colorize = self._show_speed_warning.get_active()
-        limit = data["navigation"]["speed_limit_converted"]
         speed = data["truck"]["speed_converted"]
+        if self.last_state == speed:
+            return
+        self.last_state = speed
+
+        limit = data["navigation"]["speed_limit_converted"]
         unit = data["units"]["speed"]
-        color = self.get_color(Colors.NORMAL)
-        if colorize:
-            diff = limit - speed
-            if diff < 0:
-                if diff < -2:
-                    color = self.get_color(Colors.ALERT)
-                else:
-                    color = self.get_color(Colors.WARNING)
-            self.set_center_label(str(speed), font_size=24, color=color)
-        else:
-            self.set_center_label(str(speed), font_size=24, color=color)
+
+        colorize = self._show_speed_warning.get_active()
+        self.set_center_label(str(speed), font_size=24)
         if self._show_speed_unit.get_active():
             self.set_bottom_label(data["units"]["speed"])
 
