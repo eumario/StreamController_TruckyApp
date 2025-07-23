@@ -93,6 +93,9 @@ class TruckyAppBackend(BackendBase):
         return self.client.send(data)
 
     def send_keystroke(self, key: str):
+        if len(key) > 1:
+            if key == "SPACE":
+                key = " "
         return self.send_to_trucky({
             "action": "sendKeystroke",
             "hotkeys": key
