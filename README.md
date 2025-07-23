@@ -34,7 +34,7 @@ Stream Deck through Stream Controller.
 - [ ] com.trucky.sdplugin.screenshot
 - [ ] com.trucky.sdplugin.odometer
 - [ ] com.trucky.sdplugin.gear
-- [x] com.trucky.sdplugin.turnindicators (LeftTurnIndicator and RightTurnIndicator)
+- [x] com.trucky.sdplugin.turnindicators (Implemented as Separate LeftTurnIndicator and RightTurnIndicator actions)
 - [ ] com.trucky.sdplugin.speedlimit
 - [x] com.trucky.sdplugin.trailer
 - [ ] com.trucky.sdplugin.openbusdoor
