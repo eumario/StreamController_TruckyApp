@@ -28,7 +28,7 @@ class HazardLights(TruckyIndicatorHotkey):
     on_color = [0, 255, 0, 255]
     off_icon = Icons.ACT_HAZARD_OFF
     on_icon = Icons.ACT_HAZARD_OFF
-    data_path = ["truck", "lights", "hazard"]
+    data_path = ["truck", "lights", "hazard_warning"]
     indicator_id = "hazard_lights"
     indicator_label = "Hazard Lights"
     hotkey_label = "Hazard Lights Bound Key"
