@@ -20,7 +20,12 @@ from .actions.right_turn_indicator import RightTurnIndicator
 from .actions.parking_break import ParkingBrake
 from .actions.hazard_lights import HazardLights
 from .actions.cruise_control import CruiseControl
-
+from .actions.engine import Engine
+from .actions.motor_brake import MotorBrake
+from .actions.retarder import Retarder
+from .actions.beacons import Beacons
+from .actions.wipers import Wipers
+from .actions.trailer import Trailer
 # Globals
 from .globals import Icons
 from .globals import Colors
@@ -211,6 +216,90 @@ class Trucky(PluginBase):
             }
         )
         self.add_action_holder(self.cruise_control_holder)
+
+        self.engine_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Engine,
+            action_id_suffix="Engine_Enabled",
+            action_name="Engine Indicator",
+            icon=self.get_action_icon(Icons.CAT_ENGINE),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.engine_holder)
+
+        self.motor_brake_holder = ActionHolder(
+            plugin_base=self,
+            action_base=MotorBrake,
+            action_id_suffix="Motor_Brake",
+            action_name="Motor Brake",
+            icons=self.get_action_icon(Icons.CAT_MOTOR_BRAKE),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.motor_brake_holder)
+
+        self.retarder_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Retarder,
+            action_id_suffix="Retarder",
+            action_name="Retarder",
+            icons=self.get_action_icon(Icons.CAT_RETARDER),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.retarder_holder)
+
+        self.beacons_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Beacons,
+            action_id_suffix="Beacons",
+            action_name="Light Beacons",
+            icons=self.get_action_icon(Icons.CAT_BEACONS),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.beacons_holder)
+
+        self.wipers_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Wipers,
+            action_id_suffix="Wipers",
+            action_name="Windshield Wipers",
+            icons=self.get_action_icon(Icons.CAT_WIPERS),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.wipers_holder)
+
+        self.trailer_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Trailer,
+            action_id_suffix="Trailer",
+            action_name="Trailer Indicator",
+            icons=self.get_action_icon(Icons.CAT_TRAILER),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.trailer_holder)
 
 
     def get_selector_icon(self) -> Gtk.Widget:
