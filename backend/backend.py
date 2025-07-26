@@ -29,7 +29,8 @@ class TruckyAppBackend(BackendBase):
             max_reconnect_attempts=self.max_retries,
             on_message=self.message_handler,
             on_open=self.connected_handler,
-            on_close=self.closed_handler
+            on_close=self.closed_handler,
+            on_error=self.error_handler,
         )
 
         self.thread = self.client.start_async()
@@ -66,10 +67,15 @@ class TruckyAppBackend(BackendBase):
 
     ## WebSocketApp Handlers
     def connected_handler(self) -> None:
+        log.info("Connected to Trucky App, sending Welcome Packet...")
         self.send_to_trucky(self.welcome_packet)
 
     def closed_handler(self, ws, status_code, message) -> None:
-        pass
+        log.info("Connection to Trucky App closed.")
+
+    def error_handler(self, ws, error):
+        last_telemetry = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.prev_telemetry))
+        log.error(f"WebSocket Error: {error} - Last Message: {last_telemetry}")
 
     def message_handler(self, message) -> None:
         try:
@@ -81,7 +87,7 @@ class TruckyAppBackend(BackendBase):
                     log.info("Connected to Trucky!")
                 elif data['type'] == "telemetry":
                     stamp = time.time()
-                    if stamp - self.prev_telemetry > 0.1:
+                    if stamp - self.prev_telemetry > 0.2:
                         self.prev_telemetry = stamp
                         self.frontend.trucky_websocket_event_holder.trigger_event(data['data'])
         except json.JSONDecodeError:
