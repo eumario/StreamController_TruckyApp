@@ -26,6 +26,10 @@ from .actions.retarder import Retarder
 from .actions.beacons import Beacons
 from .actions.wipers import Wipers
 from .actions.trailer import Trailer
+from .actions.rpm import Rpm
+from .actions.fuel import Fuel
+from .actions.navigation import Navigation
+
 # Globals
 from .globals import Icons
 from .globals import Colors
@@ -300,6 +304,48 @@ class Trucky(PluginBase):
             }
         )
         self.add_action_holder(self.trailer_holder)
+
+        self.rpm_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Rpm,
+            action_id_suffix="RPM",
+            action_name="Engine RPM",
+            icons=self.get_action_icon(Icons.CAT_RPM),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.rpm_holder)
+
+        self.fuel_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Fuel,
+            action_id_suffix="Fuel",
+            action_name="Fuel Tank",
+            icons=self.get_action_icon(Icons.CAT_FUEL),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.fuel_holder)
+
+        self.navigation_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Navigation,
+            action_id_suffix="Navi",
+            action_name="Navigation",
+            icons=self.get_action_icon(Icons.CAT_NAVIGATION),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.navigation_holder)
 
 
     def get_selector_icon(self) -> Gtk.Widget:
