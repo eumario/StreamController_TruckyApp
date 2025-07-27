@@ -38,7 +38,7 @@ class TruckyWebsocket:
     def _on_error(self, ws, error):
         log.error(f"WebSocket error: {error}")
         if self.user_on_error:
-            self.user_on_error(error)
+            self.user_on_error(ws,error)
 
     def _on_open(self, ws):
         log.info("Websocket Connection opened")
