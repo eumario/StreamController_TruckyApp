@@ -23,10 +23,10 @@ Stream Deck through Stream Controller.
 - [x] com.trucky.sdplugin.engine
 - [x] com.trucky.sdplugin.motorbrake
 - [x] com.trucky.sdplugin.retarder
-- [ ] com.trucky.sdplugin.rpm
+- [x] com.trucky.sdplugin.rpm
 - [x] com.trucky.sdplugin.beacons
-- [ ] com.trucky.sdplugin.navigation
-- [ ] com.trucky.sdplugin.fuel
+- [x] com.trucky.sdplugin.navigation
+- [x] com.trucky.sdplugin.fuel
 - [ ] com.trucky.sdplugin.damage
 - [ ] com.trucky.sdplugin.radiovolume
 - [ ] com.trucky.sdplugin.radioextstation
