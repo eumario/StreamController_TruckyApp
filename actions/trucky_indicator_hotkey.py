@@ -27,9 +27,6 @@ class TruckyIndicatorHotkey(TruckyCore):
     on_text: Optional[str] = None
     off_color: list[int] = []
     on_color: list[int] = []
-    off_icon: Optional[Icons] = None
-    on_icon: Optional[Icons] = None
-    data_path: list[str] = []
     indicator_id: Optional[str] = None
     indicator_label: Optional[str] = None
     hotkey_label: Optional[str] = None
@@ -51,12 +48,6 @@ class TruckyIndicatorHotkey(TruckyCore):
         self.icon_name = self.off_icon
         self.set_bottom_label(self.off_text, color=self.off_color)
         super().on_ready()
-
-    def get_from_path(self, data):
-        value = data
-        for i in self.data_path:
-            value = value[i]
-        return value
 
     def is_on(self, data):
         value = self.get_from_path(data)
