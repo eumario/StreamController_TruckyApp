@@ -321,6 +321,7 @@ class Trucky(PluginBase):
         return pref_group
 
     def init_vars(self):
+        self.add_color(Colors.NONE, [0,0,0,0])
         self.add_color(Colors.NORMAL, [255,255,255,255])
         self.add_color(Colors.WARNING, [255,111,0,255])
         self.add_color(Colors.ALERT, [255,0,0,255])
