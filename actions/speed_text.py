@@ -5,6 +5,7 @@ from time import sleep
 
 from GtkHelper.GenerativeUI.SwitchRow import SwitchRow
 from .trucky_core import TruckyCore
+from .trucky_indicator_display import TruckyIndicatorDisplay
 from ..globals import Icons
 from ..globals import Colors
 from src.backend.PluginManager.EventAssigner import EventAssigner
@@ -21,35 +22,40 @@ gi.require_version("Adw", "1")
 
 
 
-class SpeedText(TruckyCore):
+class SpeedText(TruckyIndicatorDisplay):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.data_path = ["truck", "speed_converted"]
+        self.color_keys = [Colors.NONE, Colors.WARNING, Colors.ALERT]
+        self.color_name = Colors.NONE
+        self.last_limit = 0
         self.has_configuration = True
 
     async def on_telemetry_update(self, event, data: dict):
         speed = data["truck"]["speed_converted"]
-        if self.last_state == speed:
+        limit = self.get_from_specific_path(["navigation", "speed_limit_converted"], data)
+
+        if self.last_state == speed and self.last_limit == limit:
             return
         self.last_state = speed
+        self.last_limit = limit
+        unit = self.get_from_specific_path(["units", "speed"], data)
 
-        limit = data["navigation"]["speed_limit_converted"]
-        unit = data["units"]["speed"]
+        diff = limit - speed
 
         colorize = self._show_speed_warning.get_active()
+        if colorize:
+            if diff >= 0:
+                self.color_name = Colors.NONE
+            elif 0 > diff >= -2:
+                self.color_name = Colors.WARNING
+            elif 0 > diff > -2:
+                self.color_name = Colors.ALERT
+            self.current_color = self.get_color(self.color_name)
+            self.display_color()
         self.set_center_label(str(speed), font_size=24)
         if self._show_speed_unit.get_active():
             self.set_bottom_label(data["units"]["speed"])
-
-    def create_event_assigners(self):
-        self.event_manager.add_event_assigner(
-            EventAssigner(
-                id="speed-text",
-                ui_label="Speed Text",
-                default_event=Input.Key.Events.DOWN,
-                callback=self._on_key_down,
-            )
-        )
 
     def create_generative_ui(self):
         self._show_speed_unit = SwitchRow(
@@ -71,6 +77,3 @@ class SpeedText(TruckyCore):
 
     def get_config_rows(self) -> "list[Adw.PreferencesRow]":
         return [self._show_speed_unit.widget, self._show_speed_warning.widget]
-
-    def _on_key_down(self):
-        pass
