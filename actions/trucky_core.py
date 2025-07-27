@@ -52,11 +52,10 @@ class TruckyCore(ActionCore):
         return value
 
     def get_from_specific_path(self, path: list[str], data):
-        key = path.pop(0)
-        if len(path) > 0:
-            return self.get_from_specific_path(path, data[key])
-        else:
-            return data[key]
+        value = data
+        for i in path:
+            value = value[i]
+        return value
 
     def create_generative_ui(self):
         pass
