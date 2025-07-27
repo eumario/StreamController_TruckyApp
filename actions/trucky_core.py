@@ -1,4 +1,8 @@
+from typing import Optional
+
 from loguru import logger as log
+
+from data.plugins.dev_eumario_TruckyApp.globals import Icons
 from src.backend.PluginManager.ActionCore import ActionCore
 from src.backend.DeckManagement.InputIdentifier import InputEvent, Input
 from src.backend.PluginManager.PluginSettings.Asset import Color, Icon
@@ -11,6 +15,9 @@ gi.require_version("Adw", "1")
 
 class TruckyCore(ActionCore):
     last_state: any = None
+    data_path: list[str] = []
+    off_icon: Optional[Icons] = None
+    on_icon: Optional[Icons] = None
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -37,6 +44,19 @@ class TruckyCore(ActionCore):
         super().on_ready()
         self.display_icon()
         self.display_color()
+
+    def get_from_path(self, data):
+        value = data
+        for i in self.data_path:
+            value = value[i]
+        return value
+
+    def get_from_specific_path(self, path: list[str], data):
+        key = path.pop(0)
+        if len(path) > 0:
+            return self.get_from_specific_path(path, data[key])
+        else:
+            return data[key]
 
     def create_generative_ui(self):
         pass
