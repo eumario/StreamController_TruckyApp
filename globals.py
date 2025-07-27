@@ -1,6 +1,7 @@
 from enum import StrEnum
 
 class Colors(StrEnum):
+    NONE = "color_none"
     NORMAL = "color_normal"
     WARNING = "color_warning"
     ALERT = "color_alert"
