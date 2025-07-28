@@ -2,7 +2,6 @@ from enum import StrEnum, Enum
 from datetime import datetime, timedelta
 from threading import Thread
 from time import sleep
-from functools import reduce
 
 from GtkHelper.ComboRow import SimpleComboRowItem
 from GtkHelper.GenerativeUI.ComboRow import ComboRow
