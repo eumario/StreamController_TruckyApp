@@ -32,10 +32,10 @@ Stream Deck through Stream Controller.
 - [ ] com.trucky.sdplugin.radioextstation
 - [x] com.trucky.sdplugin.wipers
 - [ ] com.trucky.sdplugin.screenshot
-- [ ] com.trucky.sdplugin.odometer
-- [ ] com.trucky.sdplugin.gear
+- [x] com.trucky.sdplugin.odometer
+- [x] com.trucky.sdplugin.gear
 - [x] com.trucky.sdplugin.turnindicators (Implemented as Separate LeftTurnIndicator and RightTurnIndicator actions)
-- [ ] com.trucky.sdplugin.speedlimit
+- [x] com.trucky.sdplugin.speedlimit
 - [x] com.trucky.sdplugin.trailer
 - [ ] com.trucky.sdplugin.openbusdoor
 - [ ] com.trucky.sdplugin.launchgame
