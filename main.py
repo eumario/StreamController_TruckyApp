@@ -32,6 +32,7 @@ from .actions.navigation import Navigation
 from .actions.damage import Damage
 from .actions.gear import Gear
 from .actions.odometer import Odometer
+from .actions.speed_limit import SpeedLimit
 
 # Globals
 from .globals import Icons
@@ -391,6 +392,20 @@ class Trucky(PluginBase):
             }
         )
         self.add_action_holder(self.odometer_holder)
+
+        self.speed_limit_holder = ActionHolder(
+            plugin_base=self,
+            action_base=SpeedLimit,
+            action_id_suffix="SpeedLimit",
+            action_name="Speed Limit",
+            icons=self.get_action_icon(Icons.CAT_SPEED_LIMIT),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.speed_limit_holder)
 
 
     def get_selector_icon(self) -> Gtk.Widget:
