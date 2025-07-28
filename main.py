@@ -31,6 +31,7 @@ from .actions.fuel import Fuel
 from .actions.navigation import Navigation
 from .actions.damage import Damage
 from .actions.gear import Gear
+from .actions.odometer import Odometer
 
 # Globals
 from .globals import Icons
@@ -376,6 +377,20 @@ class Trucky(PluginBase):
             }
         )
         self.add_action_holder(self.gear_holder)
+
+        self.odometer_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Odometer,
+            action_id_suffix="Odometer",
+            action_name="Odometer Reading",
+            icons=self.get_action_icon(Icons.CAT_ODOMETER),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.odometer_holder)
 
 
     def get_selector_icon(self) -> Gtk.Widget:
