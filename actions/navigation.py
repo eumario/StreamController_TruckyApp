@@ -59,7 +59,7 @@ class Navigation(TruckyIndicatorDisplay):
     def create_event_assigners(self):
         self.event_manager.add_event_assigner(
             EventAssigner(
-                id="switch-dispay-mode",
+                id="switch-nav-display-mode",
                 ui_label="Switch Nav Mode",
                 default_event=Input.Key.Events.DOWN,
                 callback=self._switch_display_mode
