@@ -2,6 +2,7 @@ from enum import StrEnum, Enum
 from datetime import datetime, timedelta
 from threading import Thread
 from time import sleep
+from typing import Optional
 
 from GtkHelper.GenerativeUI.SwitchRow import SwitchRow
 from .trucky_core import TruckyCore
@@ -25,5 +26,5 @@ class TruckyIndicatorDisplay(TruckyCore):
 
 
 
-    def display_text(self, text, position: str = "bottom"):
-        self.set_label(text=text, color=self.text_color, position=position)
+    def display_text(self, text, position: str = "bottom", size: int = None, outline_width: int = None):
+        self.set_label(text=text, color=self.text_color, position=position, font_size=size, outline_width=outline_width)
