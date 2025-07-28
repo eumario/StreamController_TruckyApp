@@ -27,7 +27,7 @@ Stream Deck through Stream Controller.
 - [x] com.trucky.sdplugin.beacons
 - [x] com.trucky.sdplugin.navigation
 - [x] com.trucky.sdplugin.fuel
-- [ ] com.trucky.sdplugin.damage
+- [x] com.trucky.sdplugin.damage
 - [ ] com.trucky.sdplugin.radiovolume
 - [ ] com.trucky.sdplugin.radioextstation
 - [x] com.trucky.sdplugin.wipers
