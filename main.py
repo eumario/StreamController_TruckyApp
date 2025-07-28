@@ -29,6 +29,7 @@ from .actions.trailer import Trailer
 from .actions.rpm import Rpm
 from .actions.fuel import Fuel
 from .actions.navigation import Navigation
+from .actions.damage import Damage
 
 # Globals
 from .globals import Icons
@@ -346,6 +347,20 @@ class Trucky(PluginBase):
             }
         )
         self.add_action_holder(self.navigation_holder)
+
+        self.damage_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Damage,
+            action_id_suffix="Damage",
+            action_name="Display Damage",
+            icons=self.get_action_icon(Icons.CAT_DAMAGE),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.damage_holder)
 
 
     def get_selector_icon(self) -> Gtk.Widget:
