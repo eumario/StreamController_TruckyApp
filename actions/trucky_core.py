@@ -1,17 +1,9 @@
 from typing import Optional
 
-from loguru import logger as log
-
 from data.plugins.dev_eumario_TruckyApp.globals import Icons
 from src.backend.PluginManager.ActionCore import ActionCore
-from src.backend.DeckManagement.InputIdentifier import InputEvent, Input
 from src.backend.PluginManager.PluginSettings.Asset import Color, Icon
 
-from gi.repository import Gtk, Adw
-import gi
-
-gi.require_version("Gtk", "4.0")
-gi.require_version("Adw", "1")
 
 class TruckyCore(ActionCore):
     last_state: any = None
