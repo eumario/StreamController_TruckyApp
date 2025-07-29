@@ -1,6 +1,6 @@
 from typing import Optional
 
-from data.plugins.dev_eumario_TruckyApp.globals import Icons
+from ..globals import Icons
 from src.backend.PluginManager.ActionCore import ActionCore
 from src.backend.PluginManager.PluginSettings.Asset import Color, Icon
 
