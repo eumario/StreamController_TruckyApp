@@ -20,8 +20,6 @@ class DamageOptions(Enum):
 class Damage(TruckyIndicatorDisplay):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.data_path = ["navigation", "distance_converted"]
-        self.units = ["units", "distance"]
         self.icon_keys = [Icons.ACT_ATS_TRUCK, Icons.ACT_ETS2_TRUCK, Icons.ACT_TRAILER_DAMAGE, Icons.ACT_CARGO_DAMAGE]
         self.icon_name = Icons.ACT_ATS_TRUCK
         self.truck_icon_key = Icons.ACT_ATS_TRUCK
@@ -68,23 +66,26 @@ class Damage(TruckyIndicatorDisplay):
 
         damage = 0
         option = self._damage_options.get_selected_item().get_value()
+        truck = data.get("truck")
+        trailers = data.get("trailers", [])
+        job = data.get("job", {})
+
         if option == "truck":
-            damage = self.get_from_path(data)
+            damage = truck["wear"]["chassis"]
             self.icon_name = self.truck_icon_key
         else:
+            total_trailer_wear = sum(trailer['wear']['chassis'] for trailer in trailers)
+            total_cargo_damage = sum(trailer.get("cargo_damage", 0) for trailer in trailers)
             if option == "trailer":
+                damage = total_trailer_wear
                 self.icon_name = Icons.ACT_TRAILER_DAMAGE
             else:
+                damage = total_cargo_damage
                 self.icon_name = Icons.ACT_CARGO_DAMAGE
-            trailers = self.get_from_path(data)
-            if trailers:
-                for t in trailers:
-                    if option == "trailer":
-                        damage += t["wear"]["chassis"]
-                    else:
-                        damage += t["cargo_damage"]
+
         self.current_icon = self.get_icon(self.icon_name)
         self.display_icon()
+
         if self.last_state == damage:
             return
 
@@ -111,7 +112,6 @@ class Damage(TruckyIndicatorDisplay):
         if id == "truck":
             self.icon_name = self.truck_icon_key
         elif id == "trailer" or id == "cargo":
-            self.data_path = ["trailers"]
             if id == "trailer":
                 self.icon_name = Icons.ACT_TRAILER_DAMAGE
             else:
