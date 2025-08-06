@@ -40,13 +40,19 @@ class TruckyCore(ActionCore):
     def get_from_path(self, data):
         value = data
         for i in self.data_path:
-            value = value[i]
+            if i in value:
+                value = value[i]
+            else:
+                return None
         return value
 
     def get_from_specific_path(self, path: list[str], data):
         value = data
         for i in path:
-            value = value[i]
+            if i in value:
+                value = value[i]
+            else:
+                return None
         return value
 
     def create_generative_ui(self):
