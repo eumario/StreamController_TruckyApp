@@ -22,8 +22,9 @@ class TruckyCore(ActionCore):
         self.color_name = ""
         self.backend: 'Backend' = self.plugin_base.backend
 
-        self.plugin_base.connect_to_event(event_id="dev_eumario_TruckyApp::TelemetryUpdate",
-                                          callback=self.on_telemetry_update)
+        # self.plugin_base.connect_to_event(event_id="dev_eumario_TruckyApp::TelemetryUpdate",
+        #                                   callback=self.on_telemetry_update)
+        self.plugin_base.register_telemetry(self.on_telemetry_update)
 
         self.plugin_base.asset_manager.icons.add_listener(self._icon_changed)
         self.plugin_base.asset_manager.colors.add_listener(self._color_changed)
@@ -61,7 +62,7 @@ class TruckyCore(ActionCore):
     def create_event_assigners(self):
         pass
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         pass
 
     def display_icon(self):

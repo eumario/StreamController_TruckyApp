@@ -55,7 +55,7 @@ class Navigation(TruckyIndicatorDisplay):
             )
         )
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         if data["navigation"] is not None:
             check = self.get_from_path(data)
             units = self.get_from_specific_path(self.units, data)

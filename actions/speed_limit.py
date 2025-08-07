@@ -23,7 +23,7 @@ class SpeedLimit(TruckyIndicatorDisplay):
             self.display_text(self.last_state, "center", 24)
         self.display_icon()
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         if self.last_game != data["game"]["code"]:
             self.last_game = data["game"]["code"]
             if self.last_game == "ETS2":

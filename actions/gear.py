@@ -17,7 +17,7 @@ class Gear(TruckyIndicatorDisplay):
 
         self.display_text(self.last_state, "center")
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         gear = self.get_from_path(data)
 
         if self.last_state == gear:

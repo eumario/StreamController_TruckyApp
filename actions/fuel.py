@@ -43,7 +43,7 @@ class Fuel(TruckyIndicatorDisplay):
     def get_config_rows(self) -> "list[Adw.PreferencesRow]":
         return [self._fuel_display_mode.widget]
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         fuel = self.get_from_path(data)
         if self.last_state == fuel:
             return

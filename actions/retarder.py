@@ -26,7 +26,7 @@ class Retarder(TruckyIndicatorHotkey):
         retarder = data["truck"]["retarder_level"]
         return retarder > 0
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         value = data["truck"]["retarder_"]
         self.on_text = f"Level {value}"
-        await super().on_telemetry_update(event, data)
+        super().on_telemetry_update(event, data)

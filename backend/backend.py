@@ -1,3 +1,4 @@
+import asyncio
 import json
 import time
 from loguru import logger as log
@@ -73,9 +74,10 @@ class TruckyAppBackend(BackendBase):
     def closed_handler(self, ws, status_code, message) -> None:
         log.info("Connection to Trucky App closed.")
 
-    def error_handler(self, ws, error):
+    def error_handler(self, ws, error: Exception):
         last_telemetry = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.prev_telemetry))
         log.error(f"WebSocket Error: {error} - Last Message: {last_telemetry}")
+        print(error.__traceback__)
 
     def message_handler(self, message) -> None:
         try:
@@ -89,7 +91,8 @@ class TruckyAppBackend(BackendBase):
                     stamp = time.time()
                     if stamp - self.prev_telemetry > 0.2:
                         self.prev_telemetry = stamp
-                        self.frontend.trucky_websocket_event_holder.trigger_event(data['data'])
+                        self.frontend.update_telemetry(data['data'])
+                        #self.frontend.trucky_websocket_event_holder.trigger_event(data['data'])
         except json.JSONDecodeError:
             print(f"Received unknown packet: {message}")
 

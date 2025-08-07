@@ -44,7 +44,7 @@ class TruckyIndicatorHotkey(TruckyCore):
         value = self.get_from_path(data)
         return value
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         value = self.is_on(data)
         if self.last_state == value:
             return

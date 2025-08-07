@@ -26,7 +26,7 @@ class CruiseControl(TruckyIndicatorHotkey):
         speed = data["truck"]["cruise_control_converted"]
         return speed > 0
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         value = data["truck"]["cruise_control_converted"]
         self.on_text = value
-        await super().on_telemetry_update(event, data)
+        super().on_telemetry_update(event, data)

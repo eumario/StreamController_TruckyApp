@@ -48,7 +48,8 @@ gi.require_version("Adw", "1")
 
 
 class Trucky(PluginBase):
-    is_authroized = False
+    is_authroized: bool = False
+    telemetry_funcs: list[callable] = []
     def __init__(self):
         super().__init__(use_legacy_locale=False)
         self.init_vars()
@@ -83,6 +84,14 @@ class Trucky(PluginBase):
 
     def set_authorized(self, value: bool):
         self.is_authroized = value
+
+    def register_telemetry(self, callback: callable):
+        self.telemetry_funcs.append(callback)
+
+    def update_telemetry(self, data: dict):
+        for callback in self.telemetry_funcs:
+            callback("TelemetryUpdate", data)
+        #self.trucky_websocket_event_holder.trigger_event(data)
 
     def register_actions(self, manifest):
         self.speed_text_holder = ActionHolder(

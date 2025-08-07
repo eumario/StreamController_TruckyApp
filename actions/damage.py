@@ -56,7 +56,7 @@ class Damage(TruckyIndicatorDisplay):
             )
         )
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         if self.last_game != data["game"]["code"]:
             self.last_game = data["game"]["code"]
             if self.last_game == "ETS2":

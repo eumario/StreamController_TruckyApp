@@ -10,7 +10,7 @@ class Rpm(TruckyIndicatorDisplay):
         self.text_color = [255,255,255,255]
         self.current_icon = self.get_icon(Icons.ACT_RPM)
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         rpm = self.get_from_path(data)
         if self.last_state == rpm:
             return

@@ -18,7 +18,7 @@ class Odometer(TruckyIndicatorDisplay):
 
         self.display_text(self.last_state, "top")
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         odo = self.get_from_path(data)
 
         if self.last_state == odo:

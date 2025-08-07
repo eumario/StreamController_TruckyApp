@@ -18,7 +18,7 @@ class SpeedText(TruckyIndicatorDisplay):
         self.last_limit = 0
         self.has_configuration = True
 
-    async def on_telemetry_update(self, event, data: dict):
+    def on_telemetry_update(self, event, data: dict):
         speed = data["truck"]["speed_converted"]
         limit = self.get_from_specific_path(["navigation", "speed_limit_converted"], data)
 
