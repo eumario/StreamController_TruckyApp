@@ -1,6 +1,8 @@
 from enum import Enum
 from GtkHelper.ComboRow import SimpleComboRowItem
 from GtkHelper.GenerativeUI.ComboRow import ComboRow
+from src.backend.DeckManagement.InputIdentifier import Input
+from src.backend.PluginManager.EventAssigner import EventAssigner
 from .trucky_indicator_display import TruckyIndicatorDisplay
 from ..globals import Icons
 
@@ -15,6 +17,8 @@ class FuelOptions(Enum):
     DISTANCE = SimpleComboRowItem("distance", "Fuel Distance")
 
 class Fuel(TruckyIndicatorDisplay):
+    indicator_id = "fuel"
+    indicator_label = "Fuel"
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.data_path = ["truck", "fuel_converted"]
@@ -23,6 +27,7 @@ class Fuel(TruckyIndicatorDisplay):
         self.icon_name = Icons.ACT_FUEL
         self.current_icon = self.get_icon(Icons.ACT_FUEL)
         self.text_color = [255, 255, 255, 255]
+        self._toggle_action = self.toggle_display_mode
 
 
     def create_generative_ui(self):
@@ -63,3 +68,22 @@ class Fuel(TruckyIndicatorDisplay):
             self.units[1] = "distance"
 
         self.display_text("", "bottom")
+
+    def toggle_display_mode(self):
+        item = self._fuel_display_mode.get_selected_item()
+        if item.get_value() == "volume":
+            self._fuel_display_mode.set_selected_item(FuelOptions.DISTANCE.value)
+            self._handle_fuel_display_mode(None, FuelOptions.DISTANCE.value, None)
+        else:
+            self._fuel_display_mode.set_selected_item(FuelOptions.VOLUME.value)
+            self._handle_fuel_display_mode(None, FuelOptions.VOLUME.value, None)
+
+    def create_event_assigners(self):
+        self.event_manager.add_event_assigner(
+            EventAssigner(
+                id=self.indicator_id,
+                ui_label=self.indicator_label,
+                default_event=Input.Key.Events.DOWN,
+                callback=self._toggle_action
+            )
+        )
