@@ -27,7 +27,6 @@ class Fuel(TruckyIndicatorDisplay):
         self.icon_name = Icons.ACT_FUEL
         self.current_icon = self.get_icon(Icons.ACT_FUEL)
         self.text_color = [255, 255, 255, 255]
-        self._toggle_action = self.toggle_display_mode
 
 
     def create_generative_ui(self):
@@ -69,7 +68,7 @@ class Fuel(TruckyIndicatorDisplay):
 
         self.display_text("", "bottom")
 
-    def toggle_display_mode(self):
+    def _toggle_action(self):
         item = self._fuel_display_mode.get_selected_item()
         if item.get_value() == "volume":
             self._fuel_display_mode.set_selected_item(FuelOptions.DISTANCE.value)
