@@ -17,6 +17,7 @@ class CruiseControl(TruckyIndicatorHotkey):
     hotkey_text_var = "lights.hazard_lights.label"
     show_label_title = "Show Speed"
     show_label_subtitle = "When engaged, show speed of Cruise Control"
+    last_speed = 0
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -28,5 +29,8 @@ class CruiseControl(TruckyIndicatorHotkey):
 
     def on_telemetry_update(self, event, data: dict):
         value = data["truck"]["cruise_control_converted"]
+        if self.last_speed == value:
+            return
         self.on_text = value
+        self.last_state = not self.last_state
         super().on_telemetry_update(event, data)
