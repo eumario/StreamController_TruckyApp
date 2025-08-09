@@ -89,7 +89,7 @@ class TruckyAppBackend(BackendBase):
                     log.info("Connected to Trucky!")
                 elif data['type'] == "telemetry":
                     stamp = time.time()
-                    if stamp - self.prev_telemetry > 0.1:
+                    if stamp - self.prev_telemetry > 0.2:
                         self.prev_telemetry = stamp
                         self.frontend.update_telemetry(data['data'])
                         #self.frontend.trucky_websocket_event_holder.trigger_event(data['data'])
