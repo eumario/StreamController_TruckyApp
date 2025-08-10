@@ -1,5 +1,6 @@
 from .trucky_indicator_hotkey import TruckyIndicatorHotkey
 from ..globals import Icons
+from loguru import logger as log
 
 class CruiseControl(TruckyIndicatorHotkey):
     off_text = ""
@@ -31,6 +32,18 @@ class CruiseControl(TruckyIndicatorHotkey):
         value = data["truck"]["cruise_control_converted"]
         if self.last_speed == value:
             return
-        self.on_text = value
-        self.last_state = not self.last_state
-        super().on_telemetry_update(event, data)
+
+        self.last_speed = value
+
+        if value > 0:
+            self.icon_name = self.on_icon
+            self.on_text = value
+            if self._show_label.get_value():
+                self.set_bottom_label(self.on_text, color=self.on_color)
+        else:
+            self.icon_name = self.off_icon
+            if self._show_label.get_value():
+                self.set_bottom_label(self.off_text, color=self.off_color)
+
+        self.current_icon = self.get_icon(self.icon_name)
+        self.display_icon()
