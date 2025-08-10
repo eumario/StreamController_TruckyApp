@@ -74,6 +74,8 @@ class Navigation(TruckyIndicatorDisplay):
 
         if self.data_path[1] == "distance_converted":
             self.display_text(f"{check} {units}", "top")
+        elif type(check) == int:
+            self.display_text(f"{check}", "top")
         else:
             self.display_text(check.replace(" ",""), "top")
 
